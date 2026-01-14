@@ -1,0 +1,272 @@
+### Finance Control API - REST Client Examples
+### Use with VS Code REST Client extension
+
+@baseUrl = http://localhost:3000
+@token = {{login.response.body.token}}
+
+### ==================== AUTH ====================
+
+### Register a new user
+# @name register
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "password123",
+  "name": "John Doe"
+}
+
+### Login
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+
+### Get current user profile
+GET {{baseUrl}}/me
+Authorization: Bearer {{token}}
+
+### ==================== ACCOUNTS ====================
+
+### List all accounts
+GET {{baseUrl}}/accounts
+Authorization: Bearer {{token}}
+
+### Create a new account - Wallet
+# @name createAccount
+POST {{baseUrl}}/accounts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Carteira",
+  "type": "CASH",
+  "currency": "BRL",
+  "initialBalance": 500
+}
+
+### Create a new account - Bank
+POST {{baseUrl}}/accounts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Banco Inter",
+  "type": "BANK",
+  "currency": "BRL",
+  "initialBalance": 5000
+}
+
+### Create a new account - Credit Card
+POST {{baseUrl}}/accounts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Nubank",
+  "type": "CREDIT",
+  "currency": "BRL",
+  "initialBalance": 0
+}
+
+### Update an account
+PUT {{baseUrl}}/accounts/{{createAccount.response.body.id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Carteira Pessoal",
+  "type": "CASH"
+}
+
+### Delete an account
+DELETE {{baseUrl}}/accounts/{{createAccount.response.body.id}}
+Authorization: Bearer {{token}}
+
+### ==================== CATEGORIES ====================
+
+### List all categories
+GET {{baseUrl}}/categories
+Authorization: Bearer {{token}}
+
+### List only expense categories
+GET {{baseUrl}}/categories?type=EXPENSE
+Authorization: Bearer {{token}}
+
+### List only income categories
+GET {{baseUrl}}/categories?type=INCOME
+Authorization: Bearer {{token}}
+
+### Create expense category - Food
+# @name createCategoryFood
+POST {{baseUrl}}/categories
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Alimentação",
+  "type": "EXPENSE"
+}
+
+### Create expense category - Transport
+# @name createCategoryTransport
+POST {{baseUrl}}/categories
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Transporte",
+  "type": "EXPENSE"
+}
+
+### Create income category - Salary
+# @name createCategorySalary
+POST {{baseUrl}}/categories
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Salário",
+  "type": "INCOME"
+}
+
+### Update a category
+PUT {{baseUrl}}/categories/{{createCategoryFood.response.body.id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Alimentação e Bebidas"
+}
+
+### Delete a category
+DELETE {{baseUrl}}/categories/{{createCategoryFood.response.body.id}}
+Authorization: Bearer {{token}}
+
+### ==================== TRANSACTIONS ====================
+
+### List all transactions
+GET {{baseUrl}}/transactions
+Authorization: Bearer {{token}}
+
+### List transactions with date filter
+GET {{baseUrl}}/transactions?startDate=2024-01-01&endDate=2024-01-31
+Authorization: Bearer {{token}}
+
+### List only expense transactions
+GET {{baseUrl}}/transactions?type=EXPENSE
+Authorization: Bearer {{token}}
+
+### List only income transactions
+GET {{baseUrl}}/transactions?type=INCOME
+Authorization: Bearer {{token}}
+
+### Create expense transaction
+# @name createTransaction
+POST {{baseUrl}}/transactions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "accountId": "{{createAccount.response.body.id}}",
+  "categoryId": "{{createCategoryFood.response.body.id}}",
+  "type": "EXPENSE",
+  "amount": 45.90,
+  "description": "Almoço no restaurante",
+  "date": "2024-01-15T12:00:00Z"
+}
+
+### Create income transaction
+POST {{baseUrl}}/transactions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "accountId": "{{createAccount.response.body.id}}",
+  "categoryId": "{{createCategorySalary.response.body.id}}",
+  "type": "INCOME",
+  "amount": 5000,
+  "description": "Salário Janeiro",
+  "date": "2024-01-05T00:00:00Z"
+}
+
+### Update a transaction
+PUT {{baseUrl}}/transactions/{{createTransaction.response.body.id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "amount": 52.50,
+  "description": "Almoço no restaurante - atualizado"
+}
+
+### Delete a transaction
+DELETE {{baseUrl}}/transactions/{{createTransaction.response.body.id}}
+Authorization: Bearer {{token}}
+
+### ==================== TRANSFERS ====================
+
+### Create a transfer between accounts
+POST {{baseUrl}}/transfers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "fromAccountId": "ACCOUNT_ID_1",
+  "toAccountId": "ACCOUNT_ID_2",
+  "amount": 200,
+  "description": "Transferência para carteira",
+  "date": "2024-01-15T10:00:00Z"
+}
+
+### ==================== BUDGETS ====================
+
+### List all budgets
+GET {{baseUrl}}/budgets
+Authorization: Bearer {{token}}
+
+### List budgets for specific month
+GET {{baseUrl}}/budgets?month=1&year=2024
+Authorization: Bearer {{token}}
+
+### Create a budget
+# @name createBudget
+POST {{baseUrl}}/budgets
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "categoryId": "{{createCategoryFood.response.body.id}}",
+  "amount": 800,
+  "month": 1,
+  "year": 2024
+}
+
+### Update a budget
+PUT {{baseUrl}}/budgets/{{createBudget.response.body.id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "amount": 1000
+}
+
+### Delete a budget
+DELETE {{baseUrl}}/budgets/{{createBudget.response.body.id}}
+Authorization: Bearer {{token}}
+
+### ==================== SUMMARY ====================
+
+### Get monthly summary
+GET {{baseUrl}}/summary/monthly?year=2024&month=1
+Authorization: Bearer {{token}}
+
+### ==================== HEALTH ====================
+
+### Health check
+GET {{baseUrl}}/health
