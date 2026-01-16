@@ -1,11 +1,11 @@
 {
   "name": "finance-control-api",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "dist/main.js",
   "scripts": {
-    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/main.ts",
     "build": "tsc",
-    "start": "node -r tsconfig-paths/register dist/index.js",
+    "start": "node -r tsconfig-paths/register dist/main.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -33,6 +33,7 @@
   "license": "ISC",
   "description": "Personal Finance Control System API with DDD and Clean Architecture",
   "dependencies": {
+    "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.19",
@@ -49,6 +50,7 @@
     "express": "^5.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
+    "pg": "^8.17.1",
     "pino": "^10.1.1",
     "pino-http": "^11.0.0",
     "pino-pretty": "^13.1.3",
